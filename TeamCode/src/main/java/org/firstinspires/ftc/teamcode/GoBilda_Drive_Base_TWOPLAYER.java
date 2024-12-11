@@ -53,6 +53,8 @@ public class GoBilda_Drive_Base_TWOPLAYER extends LinearOpMode {
         Servo claw = hardwareMap.servo.get("claw");
         Servo wrist = hardwareMap.servo.get("wrist");
 
+        Servo lamps = hardwareMap.servo.get("lamps");
+
         //Color and Distance Sensor are one in the same!
         sensorColor = hardwareMap.get(ColorSensor.class, "ColorSense");
         sensorDistance = hardwareMap.get(DistanceSensor.class, "ColorSense");
@@ -102,6 +104,15 @@ public class GoBilda_Drive_Base_TWOPLAYER extends LinearOpMode {
         //telemetry.update();
 
         waitForStart();
+
+            lamps.setPosition(0.5);
+            sleep(500);
+            lamps.setPosition(0);
+            sleep(500);
+            lamps.setPosition(0.5);
+            sleep(500);
+            lamps.setPosition(0);
+
 
         if (isStopRequested()) return;
 
@@ -220,6 +231,18 @@ public class GoBilda_Drive_Base_TWOPLAYER extends LinearOpMode {
                 claw.setPosition(0.3);
             }
 
+
+            ///////////////////////// Color & Lamps Section ////////////////////////////
+
+            if (sensorColor.red() > 300 && (sensorColor.red() > sensorColor.green())) { //sets lamps to red so long as green isnt predominant for yellow blocks
+                lamps.setPosition(0.28);
+            } else if (sensorColor.blue() > 300) { //sets lamps to blue
+                lamps.setPosition(0.611);
+            } else if (sensorColor.green() > 300)  //sets lamps to yellow
+                lamps.setPosition(0.388);
+            else {
+                lamps.setPosition(0);
+            }
 
             ///////////////////////// Wrist Section ////////////////////////////
 
