@@ -194,7 +194,7 @@ public class Auto_Start_Unfold extends LinearOpMode {
         claw.setPosition(0);
         sleep(1000);
 //        driveStraight(1, 4, 0);
-        setLift(2700,0.5);
+        setLift(2700,0.25);
         setExtend(500,0.5);
 //        flipper.setPosition(0.42);
 //        wrist.setPosition(0.625);
@@ -457,7 +457,7 @@ public class Auto_Start_Unfold extends LinearOpMode {
 
     public void setLift(int liftTarget, double liftSpeed) {
 
-        while (opModeIsActive()){
+        while (opModeIsActive() && (liftTarget != motorLiftLeft.getCurrentPosition())){
 
             motorLiftLeft.setTargetPosition(liftTarget);
             motorLiftRight.setTargetPosition(liftTarget);
