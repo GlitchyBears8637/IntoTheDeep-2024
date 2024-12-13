@@ -129,6 +129,8 @@ public class Robot_Hardware {
         telemetry.addData("setting up driver motor behaviors...", " ");
         telemetry.update();
 
+        lamps.setPosition(0.5);
+
         // Tell the motors not to coast. When we quit applying power it should stop.
         setDriveZeroPowerBehaviors(DcMotor.ZeroPowerBehavior.BRAKE);
 

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import java.util.Locale;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -21,6 +22,7 @@ import android.view.View;
 
 
 
+@Config
 @TeleOp
 public class GoBilda_Drive_Base_TWOPLAYER extends LinearOpMode {
 
@@ -75,17 +77,13 @@ public class GoBilda_Drive_Base_TWOPLAYER extends LinearOpMode {
         final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
 
-        motorLiftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorLiftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorLiftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorLiftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorLiftRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorLiftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        motorExtendLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorExtendLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorExtendLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorExtendRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorExtendRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorExtendRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 

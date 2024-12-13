@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -28,7 +29,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 //rt org.firstinspires.ftc.teamcode.Pipelines.BlueAlliancePipeline;
 // import org.firstinspires.ftc.vision.VisionPortal;
 
-
+@Config
 @Autonomous(preselectTeleOp="Gobilda_Drive_Base")
 public class Auto_Start_Unfold extends LinearOpMode {
 
@@ -44,6 +45,7 @@ public class Auto_Start_Unfold extends LinearOpMode {
     DcMotor motorExtendLeft;
     DcMotor motorExtendRight;
 
+    DigitalChannel LiftDown;
 
     Servo claw;
     Servo flipper;
@@ -103,25 +105,25 @@ public class Auto_Start_Unfold extends LinearOpMode {
 
 
         // Make sure your ID's match your configuration
-        DcMotor leftFront = hardwareMap.dcMotor.get("leftFront");
-        DcMotor leftBack = hardwareMap.dcMotor.get("leftBack");
-        DcMotor rightFront = hardwareMap.dcMotor.get("rightFront");
-        DcMotor rightBack = hardwareMap.dcMotor.get("rightBack");
+        leftFront = hardwareMap.dcMotor.get("leftFront");
+        leftBack = hardwareMap.dcMotor.get("leftBack");
+        rightFront = hardwareMap.dcMotor.get("rightFront");
+        rightBack = hardwareMap.dcMotor.get("rightBack");
 
 
-        DcMotor motorLiftLeft = hardwareMap.dcMotor.get("motorLiftLeft");
-        DcMotor motorLiftRight = hardwareMap.dcMotor.get("motorLiftRight");
+        motorLiftLeft = hardwareMap.dcMotor.get("motorLiftLeft");
+        motorLiftRight = hardwareMap.dcMotor.get("motorLiftRight");
 
-        DcMotor motorExtendLeft = hardwareMap.dcMotor.get("motorExtendLeft");
-        DcMotor motorExtendRight = hardwareMap.dcMotor.get("motorExtendRight");
+        motorExtendLeft = hardwareMap.dcMotor.get("motorExtendLeft");
+        motorExtendRight = hardwareMap.dcMotor.get("motorExtendRight");
 
-        DigitalChannel LiftDown = hardwareMap.get(DigitalChannel.class,"LiftHome");
+        LiftDown = hardwareMap.get(DigitalChannel.class,"LiftHome");
 
 
 
-        Servo flipper = hardwareMap.servo.get("flipper");
-        Servo claw = hardwareMap.servo.get("claw");
-        Servo wrist = hardwareMap.servo.get("wrist");
+        flipper = hardwareMap.servo.get("flipper");
+        claw = hardwareMap.servo.get("claw");
+        wrist = hardwareMap.servo.get("wrist");
 
 
 
@@ -137,8 +139,8 @@ public class Auto_Start_Unfold extends LinearOpMode {
         imu.initialize(new BHI260IMU.Parameters(RevOrientation));
 
 
-        motorLiftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorLiftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLiftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorLiftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorLiftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorLiftRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -191,17 +193,18 @@ public class Auto_Start_Unfold extends LinearOpMode {
 
         claw.setPosition(0);
         sleep(1000);
-        setLift(500,0);
-        setExtend(500,1);
-        flipper.setPosition(0.42);
-        wrist.setPosition(0.625);
-        sleep(3000);
-        setLift(0,1);
-        claw.setPosition(0.3);
-        sleep(3000);
-        setExtend(0,1);
-        sleep(10000);
-        telemetry.update();
+//        driveStraight(1, 4, 0);
+        setLift(2700,0.5);
+        setExtend(500,0.5);
+//        flipper.setPosition(0.42);
+//        wrist.setPosition(0.625);
+//        sleep(3000);
+//        setLift(0,1);
+//        claw.setPosition(0.3);
+//        sleep(3000);
+//        setExtend(0,1);
+//        sleep(10000);
+//        telemetry.update();
 
 
 
@@ -453,27 +456,38 @@ public class Auto_Start_Unfold extends LinearOpMode {
     }
 
     public void setLift(int liftTarget, double liftSpeed) {
-        while (opModeIsActive())
+
+        while (opModeIsActive()){
 
             motorLiftLeft.setTargetPosition(liftTarget);
             motorLiftRight.setTargetPosition(liftTarget);
+
+            motorLiftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorLiftLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorLiftRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorLiftRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
             motorLiftLeft.setPower(liftSpeed);
             motorLiftRight.setPower(liftSpeed);
 
-            motorLiftLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motorLiftRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // keep looping while we are still active, and BOTH motors are running.
+             //keep looping while we are still active, and BOTH motors are running.
         while (opModeIsActive() &&
                 ( motorLiftLeft.isBusy() &&  motorLiftRight.isBusy())) {
+            telemetry.addData("MotorTargetPosition:", liftTarget);
+            telemetry.addData( "MotorLiftPosition:", motorLiftLeft.getCurrentPosition());
         }
-        motorLiftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorLiftRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
+
+        }
+
 
     }
 
     public void setExtend(int extendTarget, double extendSpeed) {
-        while (opModeIsActive())
+
+        while (opModeIsActive()) {
 
             motorExtendLeft.setTargetPosition(extendTarget);
             motorExtendRight.setTargetPosition(extendTarget);
@@ -483,13 +497,11 @@ public class Auto_Start_Unfold extends LinearOpMode {
             motorExtendLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorExtendRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        // keep looping while we are still active, and BOTH motors are running.
-        while (opModeIsActive() &&
-                ( motorExtendLeft.isBusy() &&  motorExtendRight.isBusy())) {
+            // keep looping while we are still active, and BOTH motors are running.
+            while (opModeIsActive() &&
+                    (motorExtendLeft.isBusy() && motorExtendRight.isBusy())) {
+            }
         }
-        motorExtendLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorExtendRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
     }
     // **********  LOW Level driving functions.  ********************
 
