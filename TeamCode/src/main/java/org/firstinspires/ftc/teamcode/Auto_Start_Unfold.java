@@ -96,7 +96,7 @@ public class Auto_Start_Unfold extends LinearOpMode {
     // We define one value when Turning (larger errors), and the other is used when Driving straight (smaller errors).
     // Increase these numbers if the heading does not corrects strongly enough (eg: a heavy robot or using tracks)
     // Decrease these numbers if the heading does not settle on the correct value (eg: very agile robot with omni wheels)
-    static final double     P_TURN_GAIN            = 0.025;     // Larger is more responsive, but also less stable
+    static final double     P_TURN_GAIN            = 0.035;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_GAIN           = 0.015;     // Larger is more responsive, but also less stable
 
 
@@ -146,11 +146,11 @@ public class Auto_Start_Unfold extends LinearOpMode {
         motorLiftRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorLiftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        motorExtendLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorExtendLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorExtendLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorExtendLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorExtendRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorExtendRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorExtendRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorExtendRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
@@ -192,11 +192,22 @@ public class Auto_Start_Unfold extends LinearOpMode {
 
 
         claw.setPosition(0);
-        sleep(1000);
-//        driveStraight(1, 4, 0);
-        setLift(2700,0.5);
-        setExtend(500,0.5);
-//        flipper.setPosition(0.42);
+        flipper.setPosition(0.45);
+        wrist.setPosition(0.3);
+        sleep(1300);
+        driveStraight(0.45,24,0);
+        wrist.setPosition(0);
+        turnToHeading(0.85,-45);
+        driveStraight(0.45,-20,-45);
+        raiseLift(2700,1);
+        driveStraight(0.25,-20,-45);
+        setExtend(2100,1);
+        //driveStraight(0.25,-3,-45);
+        sleep(2000);
+        //claw.setPosition(.3);
+        sleep(500);
+        driveStraight(0.25,10,-45);
+
 //        wrist.setPosition(0.625);
 //        sleep(3000);
 //        setLift(0,1);
@@ -258,7 +269,7 @@ public class Auto_Start_Unfold extends LinearOpMode {
      *                   If a relative angle is required, add/subtract from the current robotHeading.
      */
 
-    public void driveStrafeRight(double speed, double time) {
+    public void driveStrafeLeft(double speed, double time) {
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
@@ -288,7 +299,7 @@ public class Auto_Start_Unfold extends LinearOpMode {
         }
     }
 
-    public void driveStrafeLeft(double speed, double time) {
+    public void driveStrafeRight(double speed, double time) {
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
@@ -455,10 +466,8 @@ public class Auto_Start_Unfold extends LinearOpMode {
 
     }
 
-    public void setLift(int liftTarget, double liftSpeed) {
-
-        while (opModeIsActive()){
-
+    public void raiseLift(int liftTarget, double liftSpeed) {
+        while (opModeIsActive() && (liftTarget > motorLiftLeft.getCurrentPosition())) {
             motorLiftLeft.setTargetPosition(liftTarget);
             motorLiftRight.setTargetPosition(liftTarget);
 
@@ -470,39 +479,57 @@ public class Auto_Start_Unfold extends LinearOpMode {
             motorLiftLeft.setPower(liftSpeed);
             motorLiftRight.setPower(liftSpeed);
 
-             //keep looping while we are still active, and BOTH motors are running.
-        while (opModeIsActive() &&
-                ( motorLiftLeft.isBusy() &&  motorLiftRight.isBusy())) {
-            telemetry.addData("MotorTargetPosition:", liftTarget);
-            telemetry.addData( "MotorLiftPosition:", motorLiftLeft.getCurrentPosition());
-        }
-
-
-
-
-        }
-
-
-    }
-
-    public void setExtend(int extendTarget, double extendSpeed) {
-
-        while (opModeIsActive()) {
-
-            motorExtendLeft.setTargetPosition(extendTarget);
-            motorExtendRight.setTargetPosition(extendTarget);
-            motorExtendLeft.setPower(extendSpeed);
-            motorExtendRight.setPower(extendSpeed);
-
-            motorExtendLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motorExtendRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // keep looping while we are still active, and BOTH motors are running.
+            //keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
-                    (motorExtendLeft.isBusy() && motorExtendRight.isBusy())) {
+                    (motorLiftLeft.isBusy() && motorLiftRight.isBusy())) {
+                telemetry.addData("MotorTargetPosition:", liftTarget);
+                telemetry.addData("MotorLiftPosition:", motorLiftLeft.getCurrentPosition());
             }
         }
     }
+    public void lowerLift(int liftTarget, double liftSpeed){
+        while (opModeIsActive() && (liftTarget < motorLiftLeft.getCurrentPosition())) {
+            motorLiftLeft.setTargetPosition(liftTarget);
+            motorLiftRight.setTargetPosition(liftTarget);
+
+            motorLiftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorLiftLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorLiftRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorLiftRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            motorLiftLeft.setPower(liftSpeed);
+            motorLiftRight.setPower(liftSpeed);
+
+            //keep looping while we are still active, and BOTH motors are running.
+            while (opModeIsActive() && (motorLiftLeft.isBusy() && motorLiftRight.isBusy())) {
+                telemetry.addData("MotorTargetPosition:", liftTarget);
+                telemetry.addData( "MotorLiftPosition:", motorLiftLeft.getCurrentPosition());
+                }
+            }
+        }
+
+
+
+
+    public void setExtend(int extendTarget, double extendSpeed) {
+        while (opModeIsActive()) {
+            motorExtendLeft.setTargetPosition(extendTarget);
+            motorExtendRight.setTargetPosition(extendTarget);
+
+            motorExtendLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorExtendLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorExtendRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorExtendRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            motorExtendLeft.setPower(extendSpeed);
+            motorExtendRight.setPower(extendSpeed);
+
+            // keep looping while we are still active, and BOTH motors are running.
+            while (opModeIsActive() && (motorExtendLeft.isBusy() && motorExtendRight.isBusy())) {
+            }
+        }
+    }
+
     // **********  LOW Level driving functions.  ********************
 
     /**
