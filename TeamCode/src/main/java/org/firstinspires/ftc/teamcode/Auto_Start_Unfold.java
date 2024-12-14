@@ -201,7 +201,7 @@ public class Auto_Start_Unfold extends LinearOpMode {
         driveStraight(0.35,-20,-45);
         raiseLift(2700,1);
         extendOut(2100,1);
-        driveStraight(0.35,-8,-45);
+        driveStraight(0.25,-8,-45);
         sleep(750);
         claw.setPosition(.3); // score first sample
         sleep(500);
@@ -211,16 +211,16 @@ public class Auto_Start_Unfold extends LinearOpMode {
         lowerLift(0,1);
         flipper.setPosition(0.42);
         turnToHeading(0.85,0);
-        driveStraight(0.35,9,0);
+        driveStraight(0.35,8,0);
         claw.setPosition(0); // pick up second sample
         sleep(500);
-        driveStraight(0.35,-9,0);
+        driveStraight(0.35,-8,0);
         turnToHeading(0.85,-45);
-        driveStraight(0.35,-6,-45);
+        driveStraight(0.25,-6,-45);
         raiseLift(2700,1);
         extendOut(2100,1);
         wrist.setPosition(0);
-        driveStraight(0.35,-8,-45);
+        driveStraight(0.25,-8,-45);
         sleep(750);
         claw.setPosition(.3); // score second sample
         sleep(500);
@@ -230,10 +230,11 @@ public class Auto_Start_Unfold extends LinearOpMode {
         lowerLift(0,1);
         flipper.setPosition(0.42);
         turnToHeading(0.85,20);
-        driveStraight(0.35,17,20);
+        driveStraight(0.25,14,20);
+        sleep(500);
         claw.setPosition(0);
         sleep(500);
-        driveStraight(0.35,-17,20);
+        driveStraight(0.35,-14,20);
         turnToHeading(0.85,-45);
 
 

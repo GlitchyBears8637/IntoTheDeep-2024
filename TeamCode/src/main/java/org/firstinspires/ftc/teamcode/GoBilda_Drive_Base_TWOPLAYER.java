@@ -103,6 +103,9 @@ public class GoBilda_Drive_Base_TWOPLAYER extends LinearOpMode {
 
         waitForStart();
 
+            wrist.setPosition(0.3);
+            claw.setPosition(0);
+            flipper.setPosition(0.42);
             lamps.setPosition(0.5);
             sleep(500);
             lamps.setPosition(0);
@@ -157,9 +160,6 @@ public class GoBilda_Drive_Base_TWOPLAYER extends LinearOpMode {
             } else {
                 Overdrive = 0.8F;
             }
-            // ^^^ Gamepad 1
-
-
 
 
 
@@ -251,10 +251,10 @@ public class GoBilda_Drive_Base_TWOPLAYER extends LinearOpMode {
                 wrist.setPosition(0.625);
             }
 
-            if ((clawa < 0.1 && wrista < 0.1) && (gamepad2.dpad_left && motorExtendLeft.getCurrentPosition() > 600))
-            {
-                wrist.setPosition(0);
-            }
+//            if ((clawa < 0.1 && wrista < 0.1) && (gamepad2.dpad_left && motorExtendLeft.getCurrentPosition() > 600))
+//            {
+//                wrist.setPosition(0);
+//            }
 
             ///////////////////////// Servo Variable Output Section ////////////////////////////
 
