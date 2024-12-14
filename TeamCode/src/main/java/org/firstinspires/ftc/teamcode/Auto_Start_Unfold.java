@@ -195,18 +195,47 @@ public class Auto_Start_Unfold extends LinearOpMode {
         flipper.setPosition(0.45);
         wrist.setPosition(0.3);
         sleep(1300);
-        driveStraight(0.45,24,0);
+        driveStraight(0.65,24,0);
         wrist.setPosition(0);
         turnToHeading(0.85,-45);
         driveStraight(0.45,-20,-45);
         raiseLift(2700,1);
-        driveStraight(0.25,-20,-45);
-        setExtend(2100,1);
-        //driveStraight(0.25,-3,-45);
-        sleep(2000);
-        //claw.setPosition(.3);
+        extendOut(2100,1);
+        driveStraight(0.45,-8,-45);
+        sleep(750);
+        claw.setPosition(.3); // score first sample
         sleep(500);
-        //driveStraight(0.25,10,-45);
+        driveStraight(0.45,14,-45);
+        wrist.setPosition(0.625); //flip claw to front
+        extendIn(0,1);
+        lowerLift(0,1);
+        flipper.setPosition(0.42);
+        turnToHeading(0.85,0);
+        driveStraight(0.65,9,0);
+        claw.setPosition(0); // pick up second sample
+        sleep(500);
+        driveStraight(0.45,-9,0);
+        turnToHeading(0.85,-45);
+        driveStraight(0.45,-6,-45);
+        raiseLift(2700,1);
+        extendOut(2100,1);
+        wrist.setPosition(0);
+        driveStraight(0.45,-8,-45);
+        sleep(750);
+        claw.setPosition(.3); // score second sample
+        sleep(500);
+        driveStraight(0.45,8,-45);
+        wrist.setPosition(0.625); //flip claw to front
+        extendIn(0,1);
+        lowerLift(0,1);
+        flipper.setPosition(0.42);
+        turnToHeading(0.85,20);
+        driveStraight(0.45,17,20);
+        claw.setPosition(0);
+        sleep(500);
+        driveStraight(0.45,-17,20);
+        turnToHeading(0.85,-45);
+
 
 //        wrist.setPosition(0.625);
 //        sleep(3000);
@@ -511,8 +540,29 @@ public class Auto_Start_Unfold extends LinearOpMode {
 
 
 
-    public void setExtend(int extendTarget, double extendSpeed) {
-        while (opModeIsActive()) {
+    public void extendOut(int extendTarget, double extendSpeed) {
+        while (opModeIsActive() && ((extendTarget-100) > motorExtendLeft.getCurrentPosition())) {
+            motorExtendLeft.setTargetPosition(extendTarget);
+            motorExtendRight.setTargetPosition(extendTarget);
+
+            motorExtendLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorExtendLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorExtendRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorExtendRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            motorExtendLeft.setPower(extendSpeed);
+            motorExtendRight.setPower(extendSpeed);
+
+            // keep looping while we are still active, and BOTH motors are running.
+            while (opModeIsActive() && (motorExtendLeft.isBusy() && motorExtendRight.isBusy())) {
+                telemetry.addData("MotorTargetPosition:", extendTarget);
+                telemetry.addData( "MotorLiftPosition:", motorExtendLeft.getCurrentPosition());
+            }
+        }
+    }
+
+    public void extendIn(int extendTarget, double extendSpeed) {
+        while (opModeIsActive() && ((extendTarget+100) < motorExtendLeft.getCurrentPosition())) {
             motorExtendLeft.setTargetPosition(extendTarget);
             motorExtendRight.setTargetPosition(extendTarget);
 
