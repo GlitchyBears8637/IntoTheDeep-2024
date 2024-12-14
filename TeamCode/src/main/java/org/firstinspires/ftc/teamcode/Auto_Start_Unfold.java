@@ -194,47 +194,44 @@ public class Auto_Start_Unfold extends LinearOpMode {
         claw.setPosition(0);
         flipper.setPosition(0.45);
         wrist.setPosition(0.3);
-        sleep(1300);
-        driveStraight(0.65,24,0);
+//        sleep(1300);
+        driveStraight(0.45,24,0);
         wrist.setPosition(0);
         turnToHeading(0.85,-45);
-        driveStraight(0.45,-20,-45);
+        driveStraight(0.35,-20,-45);
         raiseLift(2700,1);
         extendOut(2100,1);
-        driveStraight(0.45,-8,-45);
+        driveStraight(0.35,-8,-45);
         sleep(750);
         claw.setPosition(.3); // score first sample
         sleep(500);
-        driveStraight(0.45,14,-45);
+        driveStraight(0.35,13,-45);
         wrist.setPosition(0.625); //flip claw to front
         extendIn(0,1);
         lowerLift(0,1);
         flipper.setPosition(0.42);
         turnToHeading(0.85,0);
-        driveStraight(0.65,9,0);
+        driveStraight(0.35,9,0);
         claw.setPosition(0); // pick up second sample
         sleep(500);
-        driveStraight(0.45,-9,0);
+        driveStraight(0.35,-9,0);
         turnToHeading(0.85,-45);
-        driveStraight(0.45,-6,-45);
+        driveStraight(0.35,-6,-45);
         raiseLift(2700,1);
         extendOut(2100,1);
         wrist.setPosition(0);
-        driveStraight(0.45,-8,-45);
+        driveStraight(0.35,-8,-45);
         sleep(750);
         claw.setPosition(.3); // score second sample
         sleep(500);
-        driveStraight(0.45,8,-45);
+        driveStraight(0.35,8,-45);
         wrist.setPosition(0.625); //flip claw to front
         extendIn(0,1);
         lowerLift(0,1);
         flipper.setPosition(0.42);
-        turnToHeading(0.85,20);
-        driveStraight(0.45,17,20);
-        claw.setPosition(0);
-        sleep(500);
-        driveStraight(0.45,-17,20);
-        turnToHeading(0.85,-45);
+        driveStraight(0.35,20,-45);
+        raiseLift(700,1);
+
 
 
 //        wrist.setPosition(0.625);
